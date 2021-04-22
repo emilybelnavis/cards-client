@@ -1,0 +1,57 @@
+{
+  "name": "cards-against-humanity-client",
+  "version": "0.0.1-alpha",
+  "license": " AGPL-3.0-or-later",
+  "main": "build/index.js",
+  "build": {
+    "appId": "in.meanlesb.cah",
+    "productName": "Cards Against Humanity",
+    "files": [
+      "build/**/*"
+    ],
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "postinstall": "electron-builder install-app-deps",
+    "clean": "rm -rf build/ dist/",
+    "build": "npm run clean && tsc && cp -r src/public/ build/public",
+    "watch": "tsc -w",
+    "dev": "npm run build && electron build/index.js",
+    "pack:prod": "npm run build && electron-builder --dir",
+    "build:prod": "electron-builder"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://github.com/samantharachelb/cards-frontend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/samantharachelb/cards-frontend/issues"
+  },
+  "author": {
+    "name": "samantha belnavis",
+    "homepage": "https://github.com/samantharachelb/"
+  },
+  "devDependencies": {
+    "copyfiles": "^2.4.1",
+    "electron": "^12.0.5",
+    "electron-builder": "^22.10.5",
+    "ts-loader": "^9.1.0",
+    "typescript": "^4.2.4",
+    "tslib": "^2.2.0"
+  },
+  "dependencies": {
+  }
+}
