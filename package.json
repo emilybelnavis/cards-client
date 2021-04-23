@@ -2,11 +2,12 @@
   "name": "cards-against-humanity-client",
   "version": "0.0.1-alpha",
   "license": " AGPL-3.0-or-later",
-  "main": "build/index.js",
+  "main": "public/electron.js",
   "build": {
     "appId": "in.meanlesb.cah",
-    "productName": "Cards Against Humanity",
+    "productName": "Clones Assimilate Humanity",
     "files": [
+      "node_modules",
       "build/**/*"
     ],
     "dmg": {
@@ -25,13 +26,14 @@
     }
   },
   "scripts": {
-    "postinstall": "electron-builder install-app-deps",
-    "clean": "rm -rf build/ dist/",
-    "build": "npm run clean && tsc && cp -r src/public/ build/public",
-    "watch": "tsc -w",
-    "dev": "npm run build && electron build/index.js",
-    "pack:prod": "npm run build && electron-builder --dir",
-    "build:prod": "electron-builder"
+    "styles:build": "node-ass src/assets/components/scss/ -o src/assets/components/css/",
+    "react:start": "react-scripts start",
+    "react:build": "rm -rf dist/ && react-scripts build",
+    "react:eject": "react-scripts eject",
+    "electron:build": "electron-builder",
+    "build-project": "npm run react:build && npm run electron:build",
+    "start": "BROWSER=none npm run react:start",
+    "dev:start": "concurrently \"cross-env BROWSER=none npm run react:start\" \"wait-on http://localhost:3000 && electron .\""
   },
   "repository": {
     "type": "git",
@@ -44,14 +46,51 @@
     "name": "samantha belnavis",
     "homepage": "https://github.com/samantharachelb/"
   },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
   "devDependencies": {
+    "@babel/core": "^7.13.0",
+    "@types/discord-rpc": "^3.0.5",
+    "@types/electron": "^1.6.10",
+    "@types/node": "^14.14.41",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.3",
+    "@types/react-router-dom": "^5.1.7",
+    "@typescript-eslint/eslint-plugin": "^4.19.0",
+    "@typescript-eslint/parser": "^4.19.0",
+    "concurrently": "^6.0.2",
     "copyfiles": "^2.4.1",
+    "cross-env": "^7.0.3",
     "electron": "^12.0.5",
     "electron-builder": "^22.10.5",
+    "electron-reload": "^1.5.0",
     "ts-loader": "^9.1.0",
-    "typescript": "^4.2.4",
-    "tslib": "^2.2.0"
+    "tslib": "^2.2.0",
+    "wait-on": "^5.3.0",
+    "watch": "^1.0.2"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "bootstrap": "^4.6.0",
+    "discord-rpc": "^3.2.0",
+    "electron-is-dev": "^2.0.0",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.2",
+    "react-bootstrap": "^1.5.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "^4.0.3",
+    "typescript": "^4.2.4"
   }
 }

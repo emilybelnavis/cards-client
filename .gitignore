@@ -119,5 +119,7 @@ dist
 .DS_Store
 .idea/
 
+# project specific
 build/
 dist/
+**/react-app-env.d.ts
