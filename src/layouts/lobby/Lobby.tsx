@@ -11,7 +11,10 @@ import Form from "react-bootstrap/Form";
 
 import "../../assets/css/style.css";
 
-
+//const { ipcRenderer } = require('electron')
+//const { ipcRenderer } = window.require('electron');
+// @ts-ignore
+//const ipcRenderer = window.ipcRenderer;
 
 const Lobby = () => (
     <div className="pt-lg-5">
@@ -38,6 +41,12 @@ const Lobby = () => (
                                     <input type="text" className="form-control" aria-describedby="game-code-help" />
                                     <small id="game-code-help" className="form-text text-muted">Which game room are we going to lads?</small>
                                 </div>
+                                <button type="submit" className="btn btn-primary" onClick={() => {
+                                    // @ts-ignore
+                                    window.client.rpcLobby(["pee pee", "poo poo", "420", "69"]);
+                                }}>
+                                    Submit
+                                </button>
                             </Form>
                         </div>
                     </Card>

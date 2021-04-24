@@ -4,7 +4,7 @@ const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
 const isDev = require('electron-is-dev');
 const DiscordRPC = require('discord-rpc');
-const ipc = require('electron').ipcMain;
+const { ipcMain } = require('electron');
 
 let mainWindow;
 
@@ -20,7 +20,6 @@ function onReady() {
         width: 1280,
         height: 800,
         resizable: true,
-        titleBarStyle: "default",
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,
@@ -35,6 +34,7 @@ function onReady() {
             : `file://${path.join(__dirname, "../build/index.html")}`
     );
 
+    setActivity()
     mainWindow.on("closed", () => (mainWindow?.destroy()))
 }
 
@@ -52,13 +52,13 @@ DiscordRPC.register(rpcClientId);
 const rpc = new DiscordRPC.Client({transport: 'ipc'});
 const startTimestamp = new Date();
 
-async function setActivity(info, nState) {
+async function setActivity(nDetails, nState) {
     if (!rpc || !mainWindow) {
         return;
     }
 
     await rpc.setActivity({
-        details: info,
+        details: nDetails,
         state: nState,
         startTimestamp: startTimestamp,
         largeImageKey: 'icon',
@@ -67,20 +67,39 @@ async function setActivity(info, nState) {
 }
 
 
-ipc.on('rpc-lobby', (event, arg) => {
-    
-})
+// ipcMain.on('rpc-lobby', (event, arg) => {
+//     console.log("received ipc message from lobby: ", arg[0])
+// })
+
+// rpc.on('ready', () => {
+//     //setActivity("", "waiting", "in lobby").then();
+//
+//     // activity can only be set every 15 seconds
+//     setInterval(() => {
+//         setActivity("waiting", "In Lobby")
+//             .then()
+//             .catch(() => {
+//                 console.error("error has occured");
+//             });
+//     }, 15e3);
+// })
 
 rpc.on('ready', () => {
-    //setActivity("", "waiting", "in lobby").then();
+    let details;
+    let state;
+    ipcMain.on('rpc-lobby', (event, arg) => {
+        details = arg[0];
+        state = arg[1];
+    })
 
-    // activity can only be set every 15 seconds
+    setActivity(details, state).catch(() => {
+        console.error("could not update RPC data");
+    });
+
     setInterval(() => {
-        setActivity("waiting", "In Lobby")
-            .then()
-            .catch(() => {
-                console.error("error has occured");
-            });
+        setActivity(details, state).catch(() => {
+            console.error("could not update RPC data");
+        });
     }, 15e3);
 })
 
